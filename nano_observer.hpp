@@ -49,6 +49,29 @@ class Observer
         }
     }
 
+    void remove(DelegateKey const& key, Observer *observer)
+    {
+        Node* node = head;
+        Node* prev = nullptr;
+        // Only delete the first occurrence
+        for ( ; node; prev = node, node = node->next)
+        {
+            if (node->data.delegate == key && node->data.observer == observer)
+            {
+                if (prev)
+                {
+                    prev->next = node->next;
+                }
+                else
+                {
+                    head = head->next;
+                }
+                delete node;
+                break;
+            }
+        }
+    }
+
     void removeAll()
     {
         for (auto node = head; node;)
@@ -58,7 +81,7 @@ class Observer
             if (this != node->data.observer)
             {
                 // Remove this slot from this listening Observer
-                node->data.observer->remove(node->data.delegate);
+                node->data.observer->remove(node->data.delegate, this);
             }
             node = node->next;
             delete temp;

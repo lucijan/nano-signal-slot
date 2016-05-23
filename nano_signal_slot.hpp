@@ -20,8 +20,8 @@ class Signal<RT(Args...)> : private Observer
     template <typename T>
     void remove_sfinae(DelegateKey const& key, typename T::Observer* instance)
     {
-        Observer::remove(key);
-        instance->remove(key);
+        Observer::remove(key, instance);
+        instance->remove(key, this);
     }
     template <typename T>
     void insert_sfinae(DelegateKey const& key, ...)
